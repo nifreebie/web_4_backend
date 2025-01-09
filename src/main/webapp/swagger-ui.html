@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@latest/swagger-ui.css">
+  <script src="https://unpkg.com/swagger-ui-dist@latest/swagger-ui-bundle.js"></script>
+  <style>
+    html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body { margin: 0; background: #fafafa; }
+  </style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script>
+  window.onload = function() {
+    // Get the base URL from the current path
+    const pathArray = window.location.pathname.split('/');
+    const baseUrl = '/' + pathArray[1];  // Should be "/web-lab4"
+
+    const ui = SwaggerUIBundle({
+      url: baseUrl + "/api/openapi",
+      dom_id: '#swagger-ui',
+      deepLinking: true,
+      presets: [
+        SwaggerUIBundle.presets.apis
+      ],
+      plugins: [
+        SwaggerUIBundle.plugins.DownloadUrl
+      ],
+      layout: "BaseLayout",
+      docExpansion: 'list',
+      defaultModelsExpandDepth: 1,
+      defaultModelExpandDepth: 1,
+      supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+      tryItOutEnabled: true,
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      servers: [
+        {
+          url: baseUrl,
+          description: "Web Lab 4 API Server"
+        }
+      ]
+    });
+    ui.getConfigs().preFetch = (req) => {
+      req.url = baseUrl + req.url;
+      return req;
+    };
+
+    window.ui = ui;
+  };
+</script>
+</body>
+</html>
